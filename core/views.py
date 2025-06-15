@@ -48,7 +48,7 @@ from .forms import ProjectForm
 def project_list(request):
     query = request.GET.get('q')
 
-    if request.user.is_superuser or request.user.email in ['atiqumer15@gmail.com', 'shaheryartariq909@gmail.com']:
+    if request.user.is_superuser or request.user.email in ['your-admin-email', 'your-admin-email']:
         projects = Project.objects.all()
     else:
         try:
