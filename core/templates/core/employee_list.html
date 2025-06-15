@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+{% block title %}Employees{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Employees</h2>
+<form method="get" class="mb-3 d-flex">
+    <div class="input-group input-group-sm" style="max-width: 450px;">
+        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control mb-1" placeholder="Search employees by name, email, or designation...">
+        <button class="btn btn-outline-secondary mb-1" type="submit">Search</button>
+    </div>
+</form>
+
+<a href="{% url 'add_employee' %}" class="btn btn-dark mb-3">Add New Employee</a>
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Joining Date</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Contract</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+  <tbody>
+    {% for emp in employees %}
+    <tr>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.designation }}</td>
+        <td>{{ emp.join_date }}</td>
+        <td>{{ emp.email }}</td>
+        <td>{{ emp.phone }}</td>
+        <td>
+            {% if emp.contract_file %}
+                <a href="{{ emp.contract_file.url }}" target="_blank" class="btn btn-sm btn-dark">Download</a>
+            {% else %}
+                <span class="text-muted">N/A</span>
+            {% endif %}
+        </td>
+
+        <td>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'employee_profile' pk=emp.pk %}" class="btn btn-outline-dark btn-sm">View Profile</a>
+        <a href="{% url 'edit_employee' pk=emp.pk %}" class="btn btn-primary  btn-sm">Edit</a>
+        <a href="{% url 'delete_employee' pk=emp.pk %}" class="btn btn-danger btn-sm">Delete</a>
+    </div>
+</td>
+
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6" class="text-center">No employees found.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

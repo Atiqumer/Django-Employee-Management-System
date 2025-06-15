@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+{% block title %}Employee Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="card shadow-lg border-0 rounded-1">
+        <div class="card-body p-5">
+            <h3 class="card-title mb-4 text-center fw-bold text-uppercase">Employee Profile</h3>
+
+            <!-- Profile Details -->
+            <table class="table table-bordered table-hover table-striped align-middle">
+                <tbody>
+                    <tr>
+                        <th class="w-25">Name</th>
+                        <td class="w-25">{{employee.name }}</td>
+                        <th class="w-25">Designation</th>
+                        <td class="w-25">{{ employee.designation }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ employee.email }}</td>
+                        <th>Phone</th>
+                        <td>{{ employee.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th>Account Number</th>
+                        <td>{{ employee.account }}</td>
+                        <th>Account Source</th>
+                        <td>{{ employee.acc_source }}</td>
+                    </tr>
+                    <tr>
+                        <th>Join Date</th>
+                        <td>{{ employee.join_date|date:"F d, Y" }}</td>
+                        <th>Address</th>
+                        <td>{{ employee.Address }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Contract File -->
+            <div class="border rounded-3 p-4 mb-4 bg-light shadow-sm">
+                <h5 class="fw-bold mb-3">Contract File</h5>
+                {% if employee.contract_file %}
+                    <a href="{{ employee.contract_file.url }}" target="_blank" class="btn btn-outline-primary shadow-sm">
+                        <i class="bi bi-file-earmark-arrow-down"></i> Download Contract
+                    </a>
+                {% else %}
+                    <p class="text-muted mb-0">No contract file uploaded.</p>
+                {% endif %}
+            </div>
+<!-- Leave Records -->
+<div class="border rounded-3 p-4 bg-light shadow-sm mt-4">
+    <h5 class="fw-bold mb-3">Leave Records</h5>
+    {% if leaves %}
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-secondary">
+    <tr>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Days</th>
+    </tr>
+</thead>
+<tbody>
+    {% for leave in leaves %}
+    <tr>
+        <td>{{ leave.start_date|date:"F d, Y" }}</td>
+        <td>{{ leave.end_date|date:"F d, Y" }}</td>
+        <td>{{ leave.total_days }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+            <tfoot>
+                <tr class="fw-bold table-light">
+                    <td colspan="2">Total Leave Records</td>
+                    <td>{{ leave.total_days }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    {% else %}
+        <p class="text-muted mb-0">No leave records for this employee.</p>
+    {% endif %}
+</div>
+
+
+
+            <!-- Back Button -->
+            <div class="text-center mt-4">
+                <a href="{% url 'employee_list' %}" class="btn btn-dark px-4 py-2 rounded-pill shadow-sm">
+                    ← Back to Employee List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
