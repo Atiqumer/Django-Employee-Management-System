@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     # 'django_extensions',
     'core.apps.CoreConfig',
-    # 'core',
 ]
 
 MIDDLEWARE = [
@@ -96,10 +95,10 @@ LOGOUT_REDIRECT_URL = 'login'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Atiq1$default',
-        'USER': 'Atiq1',
-        'PASSWORD': 'neuralflex',
-        'HOST': 'Atiq1.mysql.pythonanywhere-services.com',
+        'NAME': 'your-username',
+        'USER': 'username',
+        'PASSWORD': 'your-password',
+        'HOST': 'your-host',
         'PORT': '3306',
     }
 }
