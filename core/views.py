@@ -151,11 +151,6 @@ def dashboard(request):
 
     return render(request, 'core/dashboard.html', context)
 
-
-# from django.shortcuts import render, redirect, get_object_or_404
-# from .models import Employee
-# from .forms import EmployeeForm
-
 @login_required
 @user_passes_test(is_admin)
 def edit_employee(request, pk):
@@ -178,7 +173,7 @@ def edit_employee(request, pk):
 def delete_employee(request, pk):
     employee = get_object_or_404(Employee, pk=pk)
     employee.delete()
-    return redirect('employee_list')  # Redirect to the employee list after deletion
+    return redirect('employee_list') 
 
 @login_required
 def edit_project(request, pk):
@@ -246,8 +241,6 @@ def public_employee_profile(request, pk):
     leaves = Leave.objects.filter(employee=employee).order_by('-created_at')
     return render(request, 'core/employee_profile.html', {'employee': employee, 'leaves': leaves})
 
-
-
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 @login_required
@@ -300,7 +293,7 @@ def leave_management(request):
                     subject='New Leave Request Submitted',
                     message=f"Employee: {employee.name}\nFrom: {leave.start_date} To: {leave.end_date}\nReason: {leave.reason}",
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=['shaheryar@neuralflex.io'],  # Replace with your admin email
+                    recipient_list=['your-email@gmail.com'],  # Replace with your admin email
                     fail_silently=True,
                 )
             messages.success(request, "Leave successfully submitted.")
@@ -342,10 +335,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.conf import settings
 from .models import Leave
-
 def admin_required(view_func):
     return user_passes_test(lambda u: u.is_superuser)(view_func)
-
 
 @login_required
 @admin_required
@@ -434,8 +425,7 @@ def generate_payslip_pdf(request, slip_id):
     # Title
     title_style = ParagraphStyle('title', parent=styles['Title'], alignment=1, fontSize=16, spaceAfter=10)
     story.append(Paragraph("Salary Slip", title_style))
-
-    # Employee Details Table
+    
     emp_data = [
         ['Employee Name', slip.employee.name],
         ['Email', slip.employee.email],
