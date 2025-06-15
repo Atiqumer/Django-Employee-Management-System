@@ -1,4 +1,4 @@
-# 🧑‍💼 Django Employee Management System
+# Django Employee Management System
 
 A scalable and secure web-based solution built with **Django**, **Bootstrap**, and **SQLite** for efficiently managing employees, projects, and salary slips. Designed to streamline HR operations with role-based access, intuitive dashboards, and modern UI.
 
