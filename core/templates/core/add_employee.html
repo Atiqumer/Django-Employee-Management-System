@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Add Employee{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Add New Employee</h2>
+
+<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+
+    {% csrf_token %}
+    <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">{{ form.name.label }}</label>
+                {{ form.name|add_class:"form-control" }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">{{ form.designation.label }}</label>
+                {{ form.designation|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">{{ form.email.label }}</label>
+                {{ form.email|add_class:"form-control" }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.phone.label }}</label>
+                {{ form.phone|add_class:"form-control" }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">{{ form.account.label }}</label>
+                {{ form.account|add_class:"form-control" }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.acc_source.label }}</label>
+                {{ form.acc_source|add_class:"form-control" }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label">{{ form.Address.label }}</label>
+                {{ form.Address|add_class:"form-control" }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.join_date.label }}</label>
+                {{ form.join_date|add_class:"form-control" }}
+            </div>
+        </div>
+        <div class="row mb-4">
+    <div class="col-md-6">
+        <label class="form-label">{{ form.contract_file.label }}</label>
+        {{ form.contract_file|add_class:"form-control" }}
+        {% if form.instance.contract_file %}
+            <p class="mt-2">
+                Current contract:
+                <a href="{{ form.instance.contract_file.url }}" target="_blank">Download</a>
+            </p>
+        {% endif %}
+    </div>
+</div>
+        <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-dark">Save</button>
+    <a href="{% url 'employee_list' %}" class="btn btn-light">Cancel</a>
+</form>
+{% endblock %}

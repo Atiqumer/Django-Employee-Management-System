@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Salary Slips{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Salary Slips</h2>
+
+<!-- Search Form -->
+<form method="get" action="" class="mb-3">
+    <div class="input-group input-group-sm" style="max-width: 450px;">
+        <input type="text" name="q" class="form-control mb-1" placeholder="Search by employee name or month..." value="{{ request.GET.q }}">
+        <button class="btn btn-outline-secondary mb-1" type="submit">Search</button>
+    </div>
+</form>
+
+{% if is_admin %}
+<a href="{% url 'add_salary' %}" class="btn btn-dark mb-3">Add Salary Slip</a>
+{% endif %}
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee</th>
+                <th>Month</th>
+                <th>Base</th>
+                <th>Allowances</th>
+                <th>Deductions</th>
+                <th>Net Salary</th>
+                {% if is_admin %}
+                    <th>Actions</th>
+                {% else %}
+    <th>Action</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% if slips %}
+                {% for slip in slips %}
+                <tr>
+                    <td>{{ slip.employee.name }}</td>
+                    <td>{{ slip.month }}</td>
+                    <td>{{ slip.base_salary|floatformat:2 }} PKR</td>
+                    <td>{{ slip.allowances|floatformat:2 }} PKR</td>
+                    <td>{{ slip.deductions|floatformat:2 }} PKR</td>
+                    <td><strong>{{ slip.net_salary|floatformat:2 }} PKR</strong></td>
+                    {% if is_admin %}
+                    <td>
+                        <a href="{% url 'generate_payslip_pdf' slip.id %}" class="btn btn-sm btn-secondary">Download PDF</a>
+                        <a href="{% url 'edit_salary' pk=slip.pk %}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="{% url 'delete_salary' pk=slip.pk %}" class="btn btn-secondary btn-sm" onclick="return confirm('Are you sure you want to delete this salary slip?');">Delete</a>
+                    </td>
+                    {% else %}
+    <td>
+        <a href="{% url 'generate_payslip_pdf' slip.id %}" class="btn btn-sm btn-secondary">Download PDF</a>
+    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="{% if is_admin %}7{% else %}6{% endif %}" class="text-center">No salary slips found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>  
+{% endblock %}

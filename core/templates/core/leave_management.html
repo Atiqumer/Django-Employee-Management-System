@@ -1,0 +1,102 @@
+{% extends 'core/base.html' %}
+{% block title %}My Leave{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container mt-1">
+    <div class="card shadow-lg border-0 rounded-1">
+        <div class="card-body p-4">
+            <h3 class="card-title mb-4 text-center fw-bold text-uppercase">Leave Management</h3>
+
+            <!-- Apply for Leave -->
+            {% if not is_admin %}
+            <div class="border rounded-3 p-4 mb-4 bg-light shadow-sm">
+                <h5 class="fw-bold mb-3">Apply for Leave</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="id_start_date" class="form-label">Start Date:</label>
+                            {{ form.start_date|add_class:"form-control" }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_end_date" class="form-label">End Date:</label>
+                            {{ form.end_date|add_class:"form-control" }}
+                        </div>
+                        <div class="col-12">
+                            <label for="id_reason" class="form-label">Reason:</label>
+                            {{ form.reason|add_class:"form-control" }}
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark px-4">Submit Leave Request</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            <!-- My Leave Requests -->
+            <h5 class="fw-bold mb-3">{% if is_admin %}All Leave Requests{% else %}My Leave History{% endif %}</h5>
+            <table class="table table-bordered table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        {% if is_admin %}
+                            <th>Employee</th>
+                        {% endif %}
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in leaves %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            {% if is_admin %}
+                                <td>{{ leave.employee.name }}</td>
+                            {% endif %}
+                            <td>{{ leave.start_date|date:"M d, Y" }}</td>
+                            <td>{{ leave.end_date|date:"M d, Y" }}</td>
+                            <td>
+                                {% if is_admin %}
+                                    {% if leave.status == 'pending' %}
+                                        <a href="{% url 'approve-leave' leave.id %}" class="btn btn-success btn-sm">Approve</a>
+                                        <a href="{% url 'reject-leave' leave.id %}" class="btn btn-danger btn-sm">Reject</a>
+                                    {% else %}
+                                        <span class="badge {% if leave.status == 'approved' %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ leave.status|title }}
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge {% if leave.status == 'approved' %}bg-success{% elif leave.status == 'pending' %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                                        {{ leave.status|title }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'delete-leave' leave.id %}" class="btn btn-outline-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this leave request?');">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No leave records found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'dashboard' %}" class="btn btn-dark px-4 py-2 rounded-pill shadow-sm">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

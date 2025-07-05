@@ -1,0 +1,129 @@
+{% extends 'core/base.html' %}
+{% load widget_tweaks %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Dashboard</h2>
+
+    {% if is_admin %}
+        <!-- ADMIN DASHBOARD CARDS -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="card shadow bg-light">
+                    <div class="card-body text-center">
+                        <h5>Total Employees</h5>
+                        <p class="fs-4">{{ total_employees }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow bg-light">
+                    <div class="card-body text-center">
+                        <h5>Total Projects</h5>
+                        <p class="fs-4">{{ total_projects }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow bg-light">
+                    <div class="card-body text-center">
+                        <h5>Ongoing Projects</h5>
+                        <p class="fs-4">{{ ongoing_projects }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow bg-light">
+                    <div class="card-body text-center">
+                        <h5>Salary Slips</h5>
+                        <p class="fs-4">{{ total_salary_slips }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'employee_list' %}" class="btn btn-dark">Manage Employees</a>
+            <a href="{% url 'project_list' %}" class="btn btn-dark">Manage Projects</a>
+            <a href="{% url 'salary_list' %}" class="btn btn-dark">Manage Salary Slips</a>
+        </div>
+
+    {% else %}
+        <!-- NORMAL USER DASHBOARD -->
+       {% if employee %}
+<div class="card shadow mb-3">
+    <div class="card-body">
+        <h5 class="mb-3">Your Profile</h5>
+        <table class="table table-bordered">
+            <tr>
+                <th>Name</th>
+                <td>{{ employee.name }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ employee.email }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ employee.designation }}</td>
+            </tr>
+            <tr>
+                <th>Joining Date</th>
+                <td>{{ employee.join_date }}</td>
+            </tr>
+        </table>
+        <a href="{% url 'employee_profile' employee.pk %}" class="btn btn-secondary mt-3">
+            View Full Profile
+        </a>
+    </div>
+</div>
+{% endif %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h5>Your Projects</h5>
+                        {% if user_projects %}
+                            <ul class="list-group">
+                                {% for project in user_projects %}
+                                    <li class="list-group-item">{{ project.title }} - {{ project.status }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No projects assigned.</p>
+                        {% endif %}
+                        <a href="{% url 'project_list' %}" class="btn btn-sm btn-secondary">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-body">
+    <h5>Your Salary Slips</h5>
+    {% if user_salary_slips %}
+        <ul class="list-group">
+            {% for slip in user_salary_slips %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ slip.month }} - PKR {{ slip.base_salary|floatformat:0 }}
+                    <a href="{% url 'generate_payslip_pdf' slip.id %}" class="btn btn-sm btn-secondary">Download PDF</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">No salary slips available.</p>
+    {% endif %}
+</div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h5>Your Leave Records</h5>
+                        <p>Total Leaves: {{ user_leaves.count }}</p>
+                        <a href="{% url 'leave-management' %}" class="btn btn-sm btn-outline-primary">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

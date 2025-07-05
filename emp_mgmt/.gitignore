@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+env/
+
+# Django Stuff
+*.sqlite3
+/media/
+staticfiles/
+db.sqlite3
+
+# VS Code
+.vscode/
+
+# Secrets
+.env

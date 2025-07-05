@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Projects</h2>
+
+<form method="get" class="mb-3">
+    <div class="input-group input-group-sm" style="max-width: 450px;">
+        <input 
+            type="text" 
+            name="q" 
+            value="{{ request.GET.q }}" 
+            class="form-control mb-1" 
+            placeholder="Search projects by title or status...">
+        <button class="btn btn-outline-secondary mb-1" type="submit">Search</button>
+    </div>
+</form>
+
+{% if is_admin %}
+<a href="{% url 'add_project' %}" class="btn btn-dark mb-3">Add New Project</a>
+{% endif %}
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            {% if is_admin %}
+            <th>Assigned Employees</th>
+            <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for proj in projects %}
+        <tr>
+            <td>{{ proj.title }}</td>
+            <td>{{ proj.status }}</td>
+            <td>{{ proj.deadline }}</td>
+            {% if is_admin %}
+            <td style="max-width: 250px; word-wrap: break-word;">
+                {% for emp in proj.employees.all %}
+                    {{ emp.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    No employees assigned.
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{% url 'edit_project' pk=proj.pk %}" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="{% url 'delete_project' pk=proj.pk %}" class="btn btn-secondary btn-sm">Delete</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="{% if is_admin %}5{% else %}3{% endif %}" class="text-center">No projects found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

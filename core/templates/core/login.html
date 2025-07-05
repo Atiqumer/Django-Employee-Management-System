@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 78vh; ">
+    <div class="card shadow-lg p-5" style=" max-width: 390px; width: 100%; border: none; border-radius: 20px;">
+        <h2 class="text-center mb-3" style="font-weight: 800; color: #343a40;">Welcome Back </h2>
+        <p class="text-center text-muted mb-3">Please enter your credentials to continue.</p>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-dark w-100 py-2" style="border-radius: 12px; font-weight: 600;">
+                Login
+            </button>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
